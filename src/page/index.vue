@@ -15,14 +15,7 @@
             </div>
         </div>
         <div class="site-nav">
-            <div class="head-cat">
-                <ul>
-                    <li v-for="c in cat" :key="c.id" class="flex_between">
-                        {{c.name}}
-                        <i class="icon iconfont icon-dayuhao"></i>
-                    </li>
-                </ul>
-            </div>
+            <!-- 轮播图 -->
             <div class="head-swiper">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
@@ -42,6 +35,20 @@
                     <div class="swiper-button-next"></div>
                     <div class="swiper-button-prev"></div>
                 </div>
+            </div>
+            <!-- 轮播图上左侧分类 -->
+            <div class="head-cat">
+                <ul>
+                    <li v-for="c in cat" :key="c.id" class="flex_between">
+                        {{c.name}}
+                        <i class="icon iconfont icon-dayuhao"></i>
+                        <div class="head-small-cat">
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="head-hero-sub clearfix">
@@ -103,30 +110,8 @@ export default {
     name: "index",
     data() {
         return {
-            nav: [
-                { id: 0, name: "小米手机" },
-                { id: 1, name: "红米" },
-                { id: 2, name: "电视" },
-                { id: 3, name: "笔记本" },
-                { id: 4, name: "空调" },
-                { id: 5, name: "新品" },
-                { id: 6, name: "路由器" },
-                { id: 7, name: "智能硬件" },
-                { id: 8, name: "服务" },
-                { id: 9, name: "社区" }
-            ],
-            cat: [
-                { id: 0, name: "手机 电话卡" },
-                { id: 1, name: "电视 盒子" },
-                { id: 2, name: "笔记本 平板" },
-                { id: 3, name: "家电 插线板" },
-                { id: 4, name: "出行 穿戴" },
-                { id: 5, name: "智能 路由器" },
-                { id: 6, name: "电源 配件" },
-                { id: 7, name: "健康 儿童" },
-                { id: 8, name: "耳机 音箱" },
-                { id: 9, name: "生活 箱包" }
-            ],
+            nav: [],
+            cat: [],
             channel: [
                 { id: 0, name: "选购手机", icon: "icon iconfont icon-liwu" },
                 { id: 1, name: "企业团购", icon: "icon iconfont icon-liwu" },
@@ -223,6 +208,20 @@ export default {
             prevButton: ".swiper-button-prev",
             nextButton: ".swiper-button-next"
         });
+        this.getNewsList();
+    },
+    methods: {
+        getNewsList: function() {
+            this.axios
+                .get(`http://localhost:3000/getIndexInfo`)
+                .then(response => {
+                    this.nav = response.data.data.nav;
+                    this.cat = response.data.data.category;
+                })
+                .catch(response => {
+                    console.log(response);
+                });
+        }
     }
 };
 </script>
@@ -428,10 +427,10 @@ export default {
                     border-top-width: 1px;
                     border-top-style: solid;
                     margin-right: 14px;
-                    .img{
+                    .img {
                         width: 160px;
                         height: 160px;
-                        img{
+                        img {
                             width: 100%;
                             height: 100%;
                         }
